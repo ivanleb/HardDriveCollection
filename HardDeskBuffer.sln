@@ -1,9 +1,13 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 15
-VisualStudioVersion = 15.0.27703.2000
+# Visual Studio 14
+VisualStudioVersion = 14.0.25420.1
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HardDeskBuffer", "HardDeskBuffer\HardDeskBuffer.csproj", "{3FA0A05B-67EB-4E46-9FF6-3E99236095F8}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SampleHardDeskBuffer", "SampleHardDeskBuffer\SampleHardDeskBuffer.csproj", "{A6CB8929-D354-4106-B1CE-4CC540261044}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HardDeskBufferTestProject", "HardDeskBufferTestProject\HardDeskBufferTestProject.csproj", "{6E43FDC4-F7BB-42B4-8396-D4D013A2A61F}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -15,6 +19,14 @@ Global
 		{3FA0A05B-67EB-4E46-9FF6-3E99236095F8}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{3FA0A05B-67EB-4E46-9FF6-3E99236095F8}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{3FA0A05B-67EB-4E46-9FF6-3E99236095F8}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A6CB8929-D354-4106-B1CE-4CC540261044}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A6CB8929-D354-4106-B1CE-4CC540261044}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A6CB8929-D354-4106-B1CE-4CC540261044}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A6CB8929-D354-4106-B1CE-4CC540261044}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6E43FDC4-F7BB-42B4-8396-D4D013A2A61F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6E43FDC4-F7BB-42B4-8396-D4D013A2A61F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6E43FDC4-F7BB-42B4-8396-D4D013A2A61F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6E43FDC4-F7BB-42B4-8396-D4D013A2A61F}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

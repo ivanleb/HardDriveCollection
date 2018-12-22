@@ -5,18 +5,18 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Runtime.Serialization.Formatters.Binary;
 using System.IO;
-using Newtonsoft;
 using System.Xml.Serialization;
 
 namespace HardDeskBuffer
 {
-    class InHardDriveCollection<T> : IDisposable
+    public class InHardDriveCollection<T> : IDisposable
     {
+#if DEBUG
+        int addcount = 0;
+#endif
         //private
         private DriveDictionary<int, Bulk<T>> Pool;
-
         private Bulk<T> currentBulk;
-
         private int currentIndex;
         private readonly int _bufferSize;
 
@@ -54,7 +54,9 @@ namespace HardDeskBuffer
         }
         private void addBulk(Bulk<T> bulk)
         {
-            Pool.Add(Pool.Count, bulk);// new Bulk<T>(_bufferSize));//add bulk
+            Pool.Add(currentIndex, bulk);// new Bulk<T>(_bufferSize));//add bulk
+            currentBulk = new Bulk<T>(_bufferSize);
+            ++currentIndex;
         }
 
         //Public 
@@ -65,7 +67,7 @@ namespace HardDeskBuffer
             
             var formatter = new BinaryFormatter();
             var tp = typeof(Bulk<T>);
-            Pool = new DriveDictionary<int, Bulk<T>>(@"\\tmp", formatter);
+            Pool = new DriveDictionary<int, Bulk<T>>(@"\tmp", formatter);
             //Pool.Add(0, currentBulk);//
         }
 
@@ -113,7 +115,7 @@ namespace HardDeskBuffer
         {
             //добавлять только если мы находимся в конце pool-а и текущий Bulk не заполнен до конца
             int maxIndex = Pool.Count == 0 ? 0 : Pool.Count -1;
-            if (currentIndex == maxIndex)
+            if (currentIndex >= maxIndex)
             {
                 if (currentBulk.Count < currentBulk.size)
                 {
@@ -121,8 +123,12 @@ namespace HardDeskBuffer
                 }
                 else
                 {
+#if DEBUG
+                    addcount++;
+                    Console.WriteLine(addcount);
+#endif
                     addBulk(currentBulk);//Добавить текущий Bulk в Pool
-                    changeBulk(Pool.Count - 1); //переключиться на последний
+                    //changeBulk(Pool.Count - 1); //переключиться на последний
                     currentBulk.Add(entity);
                 }
                 ++Count;

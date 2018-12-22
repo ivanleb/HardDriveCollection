@@ -11,14 +11,15 @@ namespace HardDeskBuffer
 {
     [Serializable]
     [XmlRootAttribute("Bulk", Namespace = " ", IsNullable = false)]
-    public struct Bulk<T> : ISerializable 
+    public struct Bulk<T> : ISerializable
     {
+        //private Bulk(){ size = 0; data = new List<T>(); }
         public int size;
 
         [XmlIgnoreAttribute]
         public int Count
         {
-            get => data.Count();
+            get { return data.Count(); }
         }
 
         public int Add(T entity)
@@ -76,11 +77,13 @@ namespace HardDeskBuffer
             this.size = size;
             data = new List<T>();
         }
+
+        //two methods for serialization
         // The special constructor is used to deserialize values.
         public Bulk(SerializationInfo info, StreamingContext context)
         {
             this.size = (int)info.GetValue("size", typeof(int));
-            data =  (List<T>)info.GetValue("data", typeof(List<T>)); ;
+            data = (List<T>)info.GetValue("data", typeof(List<T>)); ;
         }
         // Implement this method to serialize data. The method is called 
         // on serialization.

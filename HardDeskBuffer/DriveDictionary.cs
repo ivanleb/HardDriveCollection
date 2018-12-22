@@ -15,10 +15,10 @@ namespace HardDeskBuffer
     {
         //Private
         private SortedDictionary<T, string> filePaths;
+        
         private string defaultFileName;
+        private string directoryName;
         private IFormatter formatter;
-
-
         private U GetObjectFromHardDrive(string filePath)
         {
             U result = default(U);
@@ -28,7 +28,6 @@ namespace HardDeskBuffer
             }
             return result;
         }
-
         private void SaveObjectToHardDrive(U obj, string filePath)
         {
             using (var fs = new FileStream(filePath, FileMode.OpenOrCreate))
@@ -43,6 +42,8 @@ namespace HardDeskBuffer
             filePaths = new SortedDictionary<T, string>();
             this.formatter = formatter;
             this.defaultFileName = "data.tmp";
+            directoryName = Directory.GetCurrentDirectory() + directoryPath; 
+            Directory.CreateDirectory( directoryName );
         }
 
         public int Count { get; set; }
@@ -57,7 +58,7 @@ namespace HardDeskBuffer
             {
                 if (!filePaths.ContainsKey(key))
                 {
-                    var newFilePath = Count + defaultFileName;
+                    var newFilePath = directoryName + Count + defaultFileName;
                     ++Count;
                     filePaths.Add(key, newFilePath);
                 }
@@ -67,10 +68,7 @@ namespace HardDeskBuffer
 
         public void Add(T key, U obj)
         {
-            var newFilePath = Count + defaultFileName;
-            //T lastKey = default(T);
-            //filePaths.Keys.ToList().ForEach(x => lastKey = x);
-            //var afterLastKey = (T)((dynamic)lastKey + 1);
+            var newFilePath = directoryName + "\\" + Count + defaultFileName;
             filePaths.Add(key, newFilePath);
             SaveObjectToHardDrive(obj, newFilePath);
             ++Count;
