@@ -39,13 +39,12 @@ namespace SampleHardDeskBuffer
                 //    Console.WriteLine(rep[i] + " index " + i);
                 //}
 
-                for (int i = 16; i < rep.Count; i++)
+                for (int i = 6; i < rep.Count; i++)
                 {
                     rep[i] = "ttttttttttttttttttttttttttttttttttttttttttttttttt" + i;
                 }
-
-                rep.Remove("ttttttttttttttttttttttttttttttttttttttttttttttttt" + 17);
-                for (int i = 16; i < rep.Count; i++)
+                rep.Remove("ttttttttttttttttttttttttttttttttttttttttttttttttt" + 10);
+                for (int i = 6; i < rep.Count; i++)
                 {
                     Console.WriteLine(rep[i] + " index " + i);
                 }

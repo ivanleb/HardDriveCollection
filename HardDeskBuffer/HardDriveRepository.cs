@@ -148,7 +148,7 @@ namespace HardDeskBuffer
             //затем перемещаем в него элемент из последующего Bulk-а 
             //и так до тех пор пока незаполненным останется только последний Bulk.
             // если последний bulk получается пустым, то удаляем его
-            int maxIndex = Pool.Count - 1;
+            int maxIndex = Pool.Count;
 
             int tmpIndex = currentIndex;
             int entityIndex = FindIndex(entity);

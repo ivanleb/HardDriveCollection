@@ -22,14 +22,27 @@ namespace HardDeskBuffer
         private U GetObjectFromHardDrive(string filePath)
         {
             U result = default(U);
-            using (var fs = new FileStream(filePath, FileMode.OpenOrCreate))
+            using (var fs = new FileStream(filePath, FileMode.Open))
             {
+#if DEBUG
+                if (filePath == "D:\\temp\\debug\\tmp\\3data.tmp")
+                {
+                    Console.WriteLine(filePath);
+                }
+#endif
                 result = (U)formatter.Deserialize(fs);
             }
+            File.Delete(filePath);
             return result;
         }
         private void SaveObjectToHardDrive(U obj, string filePath)
         {
+#if DEBUG
+            if (filePath == "D:\\temp\\debug\\tmp\\3data.tmp")
+            {
+                Console.WriteLine(filePath);
+            }
+#endif
             using (var fs = new FileStream(filePath, FileMode.OpenOrCreate))
             {
                 formatter.Serialize(fs, obj);
@@ -58,7 +71,7 @@ namespace HardDeskBuffer
             {
                 if (!filePaths.ContainsKey(key))
                 {
-                    var newFilePath = directoryName + Count + defaultFileName;
+                    var newFilePath = directoryName + "\\" + Count + defaultFileName;
                     ++Count;
                     filePaths.Add(key, newFilePath);
                 }
@@ -69,6 +82,12 @@ namespace HardDeskBuffer
         public void Add(T key, U obj)
         {
             var newFilePath = directoryName + "\\" + Count + defaultFileName;
+#if DEBUG
+            if (Count == 3)
+            {
+                Console.WriteLine(newFilePath);
+            }
+#endif
             filePaths.Add(key, newFilePath);
             SaveObjectToHardDrive(obj, newFilePath);
             ++Count;

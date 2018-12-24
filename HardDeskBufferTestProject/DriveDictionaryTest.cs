@@ -15,17 +15,25 @@ namespace HardDeskBufferTestProject
     public class DriveDictionaryTest
     {
         int iterationNumber = 100;
+        int bulksize = 20;
+        string teststring = "testtesttesttesttesttesttesttestvvtesttesttesttest";
         [TestMethod]
         public void TestMethod1()
-        {
-            DriveDictionary<int, string> dict = new DriveDictionary<int, string>("temp", new BinaryFormatter());
+        {            
+            DriveDictionary<int, Bulk<string>> dict = new DriveDictionary<int, Bulk<string>>("temp", new BinaryFormatter());
 
             for (int i = 0; i < iterationNumber; i++)
             {
-                dict.Add(i, "testtesttesttesttesttesttesttestvvtesttesttesttest");
+                Bulk<string> bulk = new Bulk<string>(bulksize);
+                for (int j = 0; j < bulksize; j++)
+                {
+                    bulk.Add(teststring);
+                }
+                dict.Add(i, bulk);
             }
 
-
+            Assert.AreEqual(dict.Count, iterationNumber);
+            dict.Dispose();
         }
     }
 }
