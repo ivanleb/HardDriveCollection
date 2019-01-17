@@ -10,7 +10,7 @@ namespace HardDeskBuffer
     {
         static void Main(string[] args)
         {
-            using (InHardDriveCollection<string> rep = new InHardDriveCollection<string>(50))
+            using (InHardDriveCollection<string> rep = new InHardDriveCollection<string>(10000))
             {
                 int size = 100;
                 string[] strArr = new string[size];
