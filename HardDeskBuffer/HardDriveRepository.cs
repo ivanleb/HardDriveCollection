@@ -29,8 +29,17 @@ namespace HardDeskBuffer
                 currentIndex = index;
             }
         }
+        /// <summary>
+        /// Перестройка контейнера. 
+        /// Например после удаления элемента из 
+        /// </summary>
+        /// <param name="indexFrom">индекс начиная с которого нужно перестраивать</param>
+        /// <param name="indexExcept"></param>
         private void rebuildPool(int indexFrom, int indexExcept = -1)
         {
+#if DEBUG
+            Console.WriteLine("Rebuild Pool: ");
+#endif
             if (currentIndex == Pool.Count - 1)
             {
                 return;
@@ -40,15 +49,16 @@ namespace HardDeskBuffer
                 if (i == indexExcept) continue;
                 if (currentIndex + 1 != Pool.Count)
                 {
+                    //взять следующий Bulk с диска
                     Bulk<T> tmpBulk = Pool[currentIndex + 1];
 
-                    var firstElement = tmpBulk[0];
+                    //взять из него первый элемент и добавить в конец текущего 
+                    currentBulk.Add(tmpBulk[0]);
                     tmpBulk.RemoveAt(0);
-
-                    currentBulk.Add(firstElement);
-
-                    changeBulk(currentIndex + 1);
+                    //положить текущий элемент на диск
+                    Pool[currentIndex] = currentBulk;
                     currentBulk = tmpBulk;
+                    currentIndex++;
                 }
             }
         }
@@ -207,6 +217,14 @@ namespace HardDeskBuffer
 
         public void Dispose()
         {
+            Pool.Dispose();
+        }
+
+        public void Clear()
+        {
+            Count = 0;
+            currentIndex = 0;
+            currentBulk.Clear();
             Pool.Dispose();
         }
     }

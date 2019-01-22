@@ -21,15 +21,17 @@ namespace HardDeskBuffer
         private IFormatter formatter;
         private U GetObjectFromHardDrive(string filePath)
         {
+
+#if DEBUG
+            Console.WriteLine("\nGetFromHD " + filePath);
+            //if (filePath == "D:\\temp\\debug\\tmp\\3data.tmp")
+            //{
+            //    Console.WriteLine(filePath);
+            //}
+#endif
             U result = default(U);
             using (var fs = new FileStream(filePath, FileMode.Open))
             {
-#if DEBUG
-                if (filePath == "D:\\temp\\debug\\tmp\\3data.tmp")
-                {
-                    Console.WriteLine(filePath);
-                }
-#endif
                 result = (U)formatter.Deserialize(fs);
             }
             File.Delete(filePath);
@@ -38,10 +40,11 @@ namespace HardDeskBuffer
         private void SaveObjectToHardDrive(U obj, string filePath)
         {
 #if DEBUG
-            if (filePath == "D:\\temp\\debug\\tmp\\3data.tmp")
-            {
-                Console.WriteLine(filePath);
-            }
+            Console.WriteLine("\nSaveToHD " + filePath);
+            //if (filePath == "D:\\temp\\debug\\tmp\\3data.tmp")
+            //{
+            //    Console.WriteLine(filePath);
+            //}
 #endif
             using (var fs = new FileStream(filePath, FileMode.OpenOrCreate))
             {
@@ -87,6 +90,7 @@ namespace HardDeskBuffer
             {
                 Console.WriteLine(newFilePath);
             }
+            Console.WriteLine("Add to collection " + newFilePath);
 #endif
             filePaths.Add(key, newFilePath);
             SaveObjectToHardDrive(obj, newFilePath);
@@ -110,6 +114,16 @@ namespace HardDeskBuffer
             {
                 File.Delete(path);
             }
+        }
+
+        public void Clear()
+        {
+            Count = 0;
+            foreach (var path in filePaths.Values)
+            {
+                File.Delete(path);
+            }
+            filePaths.Clear();
         }
     }
 }

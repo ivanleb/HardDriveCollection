@@ -20,9 +20,9 @@ namespace SampleHardDeskBuffer
         }
         static void Main(string[] args)
         {
-            using (InHardDriveCollection<string> rep = new InHardDriveCollection<string>(5))
+            using (InHardDriveCollection<string> rep = new InHardDriveCollection<string>(40))
             {
-                int size = 20;
+                int size = 200;
                 string[] strArr = new string[size];
                 for (int i = 0; i < size; i++)
                 {
@@ -33,7 +33,12 @@ namespace SampleHardDeskBuffer
                 {
                     rep.Add(strArr[i]);
                 }
-
+                for (int i = 0; i < size; i++)
+                {
+                    strArr[i] = "";
+                }
+                strArr = null;
+                GC.Collect();
                 //for (int i = 0; i < rep.Count; i++)
                 //{
                 //    Console.WriteLine(rep[i] + " index " + i);

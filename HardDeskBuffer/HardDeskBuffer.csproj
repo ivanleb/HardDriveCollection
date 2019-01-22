@@ -51,7 +51,6 @@
     <Compile Include="DriveDictionary.cs" />
     <Compile Include="HardDriveRepository.cs" />
     <Compile Include="IRepository.cs" />
-    <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

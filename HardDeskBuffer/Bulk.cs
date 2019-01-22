@@ -94,5 +94,10 @@ namespace HardDeskBuffer
             info.AddValue("data", data, typeof(List<T>));
         }
 
+        public void Clear()
+        {
+            data.Clear();
+        }
+
     }
 }
