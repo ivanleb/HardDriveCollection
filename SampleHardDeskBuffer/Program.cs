@@ -44,7 +44,7 @@ namespace SampleHardDeskBuffer
                 //    Console.WriteLine(rep[i] + " index " + i);
                 //}
 
-                for (int i = 6; i < rep.Count; i++)
+                for (int i = 2; i < rep.Count; i++)
                 {
                     rep[i] = "ttttttttttttttttttttttttttttttttttttttttttttttttt" + i;
                 }
@@ -53,6 +53,18 @@ namespace SampleHardDeskBuffer
                 {
                     Console.WriteLine(rep[i] + " index " + i);
                 }
+
+                foreach (var item in rep)
+                {
+                    Console.WriteLine(item);
+                }
+                //var enumerator = rep.GetEnumerator();
+                //while (enumerator.MoveNext())
+                //{
+                //    Console.WriteLine(enumerator.Current);
+                //}
+                //enumerator.Reset();
+
             }
         }
     }

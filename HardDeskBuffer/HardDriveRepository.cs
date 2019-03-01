@@ -6,10 +6,11 @@ using System.Threading.Tasks;
 using System.Runtime.Serialization.Formatters.Binary;
 using System.IO;
 using System.Xml.Serialization;
+using System.Collections;
 
 namespace HardDeskBuffer
 {
-    public class InHardDriveCollection<T> : IDisposable
+    public class InHardDriveCollection<T> : IDisposable, IEnumerable
     {
 #if DEBUG
         int addcount = 0;
@@ -226,6 +227,11 @@ namespace HardDeskBuffer
             currentIndex = 0;
             currentBulk.Clear();
             Pool.Dispose();
+        }
+
+        public IEnumerator GetEnumerator()
+        {
+            return new HardDeskBufferEnumerator<T>(this);
         }
     }
 }

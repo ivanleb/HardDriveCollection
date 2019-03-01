@@ -18,7 +18,7 @@ namespace HardDeskBufferTestProject
         int bulksize = 20;
         string teststring = "testtesttesttesttesttesttesttestvvtesttesttesttest";
         [TestMethod]
-        public void TestMethod1()
+        public void TestDictionaryAdd()
         {            
             DriveDictionary<int, Bulk<string>> dict = new DriveDictionary<int, Bulk<string>>("temp", new BinaryFormatter());
 

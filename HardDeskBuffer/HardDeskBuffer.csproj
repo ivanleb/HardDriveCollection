@@ -49,6 +49,7 @@
   <ItemGroup>
     <Compile Include="Bulk.cs" />
     <Compile Include="DriveDictionary.cs" />
+    <Compile Include="HardDeskBufferEnumerator.cs" />
     <Compile Include="HardDriveRepository.cs" />
     <Compile Include="IRepository.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

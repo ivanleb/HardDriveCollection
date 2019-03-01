@@ -1,0 +1,28 @@
+﻿using System;
+using System.Collections;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace HardDeskBuffer
+{
+    public class HardDeskBufferEnumerator<T> : IEnumerator
+    {
+        private InHardDriveCollection<T> inHardDriveCollection;
+        private int position = -1;
+        public HardDeskBufferEnumerator(InHardDriveCollection<T> inHardDriveCollection)
+        {
+            this.inHardDriveCollection = inHardDriveCollection;
+        }
+
+        public object Current => !(position == -1 || position >= inHardDriveCollection.Count) ? inHardDriveCollection[position] : throw new InvalidOperationException();
+
+        public bool MoveNext() => position++ < inHardDriveCollection.Count - 1;
+
+        public void Reset()
+        {
+            position = -1;
+        }
+    }
+}
