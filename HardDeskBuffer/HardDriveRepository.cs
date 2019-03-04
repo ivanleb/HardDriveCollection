@@ -7,20 +7,35 @@ using System.Runtime.Serialization.Formatters.Binary;
 using System.IO;
 using System.Xml.Serialization;
 using System.Collections;
+using System.Runtime.Serialization;
 
 namespace HardDeskBuffer
 {
     public class InHardDriveCollection<T> : IDisposable, IEnumerable
+        //where T : ISerializable
     {
 #if DEBUG
         int addcount = 0;
 #endif
         //private
         private DriveDictionary<int, Bulk<T>> Pool;
+        /// <summary>
+        /// bulk in memory
+        /// </summary>
         private Bulk<T> currentBulk;
+        /// <summary>
+        /// Bulk index 
+        /// </summary>
         private int currentIndex;
+        /// <summary>
+        /// size of one bulk
+        /// </summary>
         private readonly int _bufferSize;
 
+        /// <summary>
+        /// Change current bulk to bulk with index
+        /// </summary>
+        /// <param name="index">bulk index in pool</param>
         private void changeBulk(int index)
         {
             if (currentIndex != index)
@@ -30,9 +45,11 @@ namespace HardDeskBuffer
                 currentIndex = index;
             }
         }
+
         /// <summary>
         /// Перестройка контейнера. 
         /// Например после удаления элемента из 
+        /// Или после вставки в контейнер
         /// </summary>
         /// <param name="indexFrom">индекс начиная с которого нужно перестраивать</param>
         /// <param name="indexExcept"></param>
@@ -53,10 +70,22 @@ namespace HardDeskBuffer
                     //взять следующий Bulk с диска
                     Bulk<T> tmpBulk = Pool[currentIndex + 1];
 
-                    //взять из него первый элемент и добавить в конец текущего 
-                    currentBulk.Add(tmpBulk[0]);
-                    tmpBulk.RemoveAt(0);
-                    //положить текущий элемент на диск
+                    //циклически перемещать лишний элемент в конец
+                    if (currentBulk.Count > _bufferSize)
+                    {
+                        //взять из текущего bulk-а последний элемент и добавить в начало следующего 
+                        tmpBulk.Insert(0,currentBulk[currentBulk.Count - 1]);
+                        currentBulk.RemoveAt(currentBulk.Count - 1);
+                    }
+                    //циклически сдвигать пустое место в конец
+                    else
+                    {
+                        //взять из него первый элемент и добавить в конец текущего 
+                        currentBulk.Add(tmpBulk[0]);
+                        tmpBulk.RemoveAt(0);
+                    }
+
+                    //положить текущий bulk на диск
                     Pool[currentIndex] = currentBulk;
                     currentBulk = tmpBulk;
                     currentIndex++;
@@ -79,7 +108,6 @@ namespace HardDeskBuffer
             var formatter = new BinaryFormatter();
             var tp = typeof(Bulk<T>);
             Pool = new DriveDictionary<int, Bulk<T>>(@"\tmp", formatter);
-            //Pool.Add(0, currentBulk);//
         }
 
         public int Count { get; set; }
@@ -154,7 +182,7 @@ namespace HardDeskBuffer
         public bool Remove(T entity)
         {
             //ищем объект во всем Pool-е
-            //если он находится в последнем Bulke-е то удаляем просто из него
+            //если он находится в последнем Bulke-е то просто удаляем объект из последнего Bulk-а
             //если он находится не в последнем, то переключаемся на нужный Bulk, удаляем из него, 
             //затем перемещаем в него элемент из последующего Bulk-а 
             //и так до тех пор пока незаполненным останется только последний Bulk.
@@ -162,7 +190,7 @@ namespace HardDeskBuffer
             int maxIndex = Pool.Count;
 
             int tmpIndex = currentIndex;
-            int entityIndex = FindIndex(entity);
+            int entityIndex = IndexOf(entity);
             if (entityIndex != -1)
             {
                 int entityIndexInPool = (int)Math.Floor((double)entityIndex / _bufferSize);
@@ -191,7 +219,7 @@ namespace HardDeskBuffer
             else return false;
         }
 
-        public int FindIndex(T entity)
+        public int IndexOf(T entity)
         {
             //сначала ищщем в текущем Bulk-е
             //Если нет, то перебираем всю коллекцию, кроме того в котором уже искали
@@ -214,6 +242,21 @@ namespace HardDeskBuffer
                 }
                 return -1;
             }
+        }
+
+        public void Insert(int index, T value)
+        {
+            if (index > Count || index < 0) throw new IndexOutOfRangeException();
+            //если индекс, по которому нужно вставить находится в текущем Bulk-е, то просто вставляем
+            int neededIndex = index / _bufferSize;
+            // если текущий bulk дальше от начала коллекции чем требуемый
+            if (currentIndex * _bufferSize > index || (currentIndex + 1) * _bufferSize >= index)
+            {
+                changeBulk(neededIndex);
+            }
+            currentBulk.Insert(index - currentIndex * _bufferSize, value);
+            rebuildPool(neededIndex);
+            Count++;
         }
 
         public void Dispose()

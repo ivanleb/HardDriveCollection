@@ -10,13 +10,13 @@ using System.Xml.Serialization;
 namespace HardDeskBuffer
 {
     [Serializable]
-    [XmlRootAttribute("Bulk", Namespace = " ", IsNullable = false)]
+    [XmlRoot("Bulk", Namespace = " ", IsNullable = false)]
     public struct Bulk<T> : ISerializable
     {
         //private Bulk(){ size = 0; data = new List<T>(); }
         public int size;
 
-        [XmlIgnoreAttribute]
+        [XmlIgnore]
         public int Count
         {
             get { return data.Count(); }
@@ -37,13 +37,16 @@ namespace HardDeskBuffer
         {
             data.RemoveAt(i);
         }
-
+        public void Insert(int index, T value)
+        {
+            data.Insert(index, value);
+        }
         public int FindIndex(T entity)
         {
             return data.FindIndex(x => x.Equals(entity));
         }
 
-        [XmlIgnoreAttribute]
+        [XmlIgnore]
         public T this[int index]
         {
             get

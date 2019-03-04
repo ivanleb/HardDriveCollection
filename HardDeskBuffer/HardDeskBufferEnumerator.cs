@@ -2,12 +2,14 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.Serialization;
 using System.Text;
 using System.Threading.Tasks;
 
 namespace HardDeskBuffer
 {
     public class HardDeskBufferEnumerator<T> : IEnumerator
+        //where T : ISerializable
     {
         private InHardDriveCollection<T> inHardDriveCollection;
         private int position = -1;

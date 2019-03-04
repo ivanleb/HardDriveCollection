@@ -9,6 +9,11 @@ using System.Runtime.Serialization;
 
 namespace HardDeskBuffer
 {
+    /// <summary>
+    /// Collection that save bulks in desk
+    /// </summary>
+    /// <typeparam name="T"></typeparam>
+    /// <typeparam name="U"></typeparam>
     public class DriveDictionary<T, U> : IDisposable
         where T : IComparable
         where U : ISerializable
@@ -21,7 +26,6 @@ namespace HardDeskBuffer
         private IFormatter formatter;
         private U GetObjectFromHardDrive(string filePath)
         {
-
 #if DEBUG
             Console.WriteLine("\nGetFromHD " + filePath);
             //if (filePath == "D:\\temp\\debug\\tmp\\3data.tmp")
