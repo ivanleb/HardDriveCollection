@@ -13,22 +13,18 @@ namespace HardDeskBuffer
     [XmlRoot("Bulk", Namespace = " ", IsNullable = false)]
     public struct Bulk<T> : ISerializable
     {
-        //private Bulk(){ size = 0; data = new List<T>(); }
         public int size;
-
         [XmlIgnore]
         public int Count
         {
             get { return data.Count(); }
         }
-
         public int Add(T entity)
         {
             if (data.Count >= size) return -1;
             data.Add(entity);
             return 1;
         }
-
         public bool Remove(T entity)
         {
             return data.Remove(entity);
@@ -45,7 +41,6 @@ namespace HardDeskBuffer
         {
             return data.FindIndex(x => x.Equals(entity));
         }
-
         [XmlIgnore]
         public T this[int index]
         {
@@ -72,17 +67,14 @@ namespace HardDeskBuffer
                 }
             }
         }
-
         public List<T> data;
-
         public Bulk(int size)
         {
             this.size = size;
             data = new List<T>();
         }
-
         //two methods for serialization
-        // The special constructor is used to deserialize values.
+        //The special constructor is used to deserialize values.
         public Bulk(SerializationInfo info, StreamingContext context)
         {
             this.size = (int)info.GetValue("size", typeof(int));
@@ -96,11 +88,9 @@ namespace HardDeskBuffer
             info.AddValue("size", size, typeof(int));
             info.AddValue("data", data, typeof(List<T>));
         }
-
         public void Clear()
         {
             data.Clear();
         }
-
     }
 }

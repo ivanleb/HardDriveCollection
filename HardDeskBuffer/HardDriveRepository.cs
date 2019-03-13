@@ -11,7 +11,7 @@ using System.Runtime.Serialization;
 
 namespace HardDeskBuffer
 {
-    public class InHardDriveCollection<T> : IDisposable, IEnumerable
+    public class InHardDriveCollection<T> : IDisposable, IEnumerable<T>
         //where T : ISerializable
     {
 #if DEBUG
@@ -275,6 +275,30 @@ namespace HardDeskBuffer
         public IEnumerator GetEnumerator()
         {
             return new HardDeskBufferEnumerator<T>(this);
+        }
+
+        IEnumerator<T> IEnumerable<T>.GetEnumerator()
+        {
+            return new HardDeskBufferEnumerator<T>(this);
+        }
+
+        public void ParallelItemsHandle(Func<T, Task<int>> handler, IProgress<int> progress)
+        {
+            for (int i = 0; i < Pool.Count; i++)
+            {
+                List<Task<int>> taskList = new List<Task<int>>();
+                changeBulk(i);
+                foreach (var item in currentBulk.data)
+                {
+                    taskList.Add(handler(item));
+                }
+
+                foreach (var task in taskList)
+                {
+                    var r = task.Result;
+                }
+            }
+            progress.Report(0);
         }
     }
 }

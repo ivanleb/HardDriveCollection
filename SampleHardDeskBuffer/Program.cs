@@ -86,7 +86,9 @@ namespace SampleHardDeskBuffer
                             Console.WriteLine(rep[i] + " index " + i);
                         }
                         rep.Insert(rep.Count, "insertedValue");
-                        foreach (var item in rep)
+
+                        IEnumerable<string> collection = rep;
+                        foreach (var item in collection)
                         {
                             Console.WriteLine(item);
                         }

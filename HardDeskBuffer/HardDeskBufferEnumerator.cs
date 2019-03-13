@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace HardDeskBuffer
 {
-    public class HardDeskBufferEnumerator<T> : IEnumerator
+    public class HardDeskBufferEnumerator<T> : IEnumerator<T>
         //where T : ISerializable
     {
         private InHardDriveCollection<T> inHardDriveCollection;
@@ -19,6 +19,13 @@ namespace HardDeskBuffer
         }
 
         public object Current => !(position == -1 || position >= inHardDriveCollection.Count) ? inHardDriveCollection[position] : throw new InvalidOperationException();
+
+        T IEnumerator<T>.Current => !(position == -1 || position >= inHardDriveCollection.Count) ? inHardDriveCollection[position] : throw new InvalidOperationException();
+
+        public void Dispose()
+        {
+            //throw new NotImplementedException();
+        }
 
         public bool MoveNext() => position++ < inHardDriveCollection.Count - 1;
 
